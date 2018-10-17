@@ -13,15 +13,25 @@ const io = socketIO(server);
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.on('createMessage', (message) => {
-    console.log(`Message received: ${JSON.stringify(message, undefined, 2)}`)
+  socket.emit('newMessage', {
+    from: 'Admin',
+    message: 'Welcome to the chat!'
   })
 
-  socket.emit('newMessage', {
-    from: "John",
-    content: 'Whooooo!',
-    createdAt: new Date().toLocaleString()
-  });
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    message: 'A user joined the chat!'
+  })
+
+  socket.on('createMessage', (message) => {
+    console.log(`Message received: ${JSON.stringify(message, undefined, 2)}`)
+    
+    socket.broadcast.emit('newMessage', {
+      from: message.from,
+      text: message.content,
+      createdAt: new Date().toLocaleString()
+    })
+  })
 
   socket.on('disconnect', () => 
   console.log('User disconnected'));
