@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app)
 const io = socketIO(server);
 
-const { generateMessage } = require('./util/message')
+const { generateMessage, generateLocationMessage } = require('./util/message')
 const now = () => new Date().toLocaleString()
 
 io.on('connection', (socket) => {
@@ -28,6 +28,10 @@ io.on('connection', (socket) => {
     console.log(`Message received [${now()}]: ${JSON.stringify(message, undefined, 2)} `)
     io.emit('newMessage', generateMessage(message.from, message.content))
     callback()
+  })
+
+  socket.on('createLocMessage', location => {
+    io.emit('newLocationMessage', generateLocationMessage(location.from, location.latitude, location.longitude) )
   })
 
   socket.on('disconnect', () => 
