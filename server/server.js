@@ -3,13 +3,15 @@ const path = require('path');
 const express = require('express');
 const socketIO = require('socket.io');
 const hbs = require('hbs');
-const {generateMessage} = require('./util/message')
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app)
 const io = socketIO(server);
+
+const { generateMessage } = require('./util/message')
+const now = () => new Date().toLocaleString()
 
 io.on('connection', (socket) => {
   console.log('New user connected');
@@ -22,12 +24,10 @@ io.on('connection', (socket) => {
     generateMessage('Admin', 'A user joined the chat!')
   )
 
-  socket.on('createMessage', (data) => {
-    console.log(`Message received: ${JSON.stringify(data, undefined, 2)}`)
-    
-    socket.broadcast.emit('newMessage',
-      generateMessage(data.from, data.content)
-    )
+  socket.on('createMessage', (message, callback) => {
+    console.log(`Message received [${now()}]: ${JSON.stringify(message, undefined, 2)} `)
+    io.emit('newMessage', generateMessage(message.from, message.content))
+    callback()
   })
 
   socket.on('disconnect', () => 
@@ -35,13 +35,13 @@ io.on('connection', (socket) => {
 })
 
 app.use((request, response, next) => {
-  let now = new Date().toLocaleString()
-  console.log(`${now}: ${request.method} '${request.url}'`)
+  console.log(`${now()}: ${request.method} '${request.url}'`)
   next();
 })
 
 app.use(express.static(publicPath))
 
 server.listen(port, () => console.log('Server listening on port 3000'))
+
 
 
