@@ -1,42 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Node Chat App</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Join | Chat App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="chat">
-
-  <div class="chat__sidebar">
-    <h3>People</h3>
-    <div id="users"></div>
-    <div class="chat__name">
-      <form id='name-form'>
-        <input type="text" id="name-input" placeholder="Your name" />
-      </form>
-    </div>
+<body class="centered-form">
+  <div class="centered-form__form">
+    <form action="chat.html">
+      <div class="form-field">
+        <h3>Join a Chat</h3>
+      </div>
+      <div class="form-field">
+        <label for="">Display Name</label>
+        <input id="room" type="text" name="name" autofocus />
+      </div>
+      <div class="form-field">
+        <label for="room">Room name</label>
+        <input type="text" id="room" name="room" />
+      </div>
+      <div class="form-field">
+        <button>Join</button>
+      </div>
+    </form>
   </div>
-
-  <div class="chat__main">
-    <ol id='chat-container' class='chat__messages'>
-    </ol>
-      
-    <div class="chat__footer">
-      <form id='chat-form'>
-        <input type="text" id="text-input" placeholder="Enter message..." autofocus autocomplete="off"/>
-        <button>Send</button>
-      </form>
-      <button id='send-location'>Send location</button>
-    </div>
-  </div>
-
-  <script id='message-template' type='text/template'>
-    <li>This is a template</li>
-  </script>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/index.js"></script>
-  <script src="/js/libs/moment.js"></script>
 </body>
-
 </html>

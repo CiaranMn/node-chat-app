@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chat | Chat App</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="chat">
+
+  <div class="chat__sidebar">
+    <h3>People</h3>
+    <div id="users"></div>
+    <div class="chat__name">
+      <form id='name-form'>
+        <input type="text" id="name-input" placeholder="Your name" />
+      </form>
+    </div>
+  </div>
+
+  <div class="chat__main">
+    <ol id='chat-container' class='chat__messages'>
+    </ol>
+      
+    <div class="chat__footer">
+      <form id='chat-form'>
+        <input type="text" id="text-input" placeholder="Enter message..." autofocus autocomplete="off"/>
+        <button>Send</button>
+      </form>
+      <button id='send-location'>Send location</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/libs/moment.js"></script>
+</body>
+
+</html>
