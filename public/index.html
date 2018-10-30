@@ -3,31 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Node Chat App</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <h1>Chat&trade;</h1>
-  <p>Welcome to the Chat App!</p>
-  
-  <form id='name-form'>
-    <div>
-      <input type="text" id="name-input" placeholder="Your name" />
-      <!-- <button>Set name</button> -->
-    </div>
-  </form>
-  <form id='chat-form'>
-    <div>
-      <input type="text" id="text-input" placeholder="Enter message..." size="40"/>
-      <button>Send</button>
-    </div>
-  </form>
-  <button id='send-location'>Send Location</button>
+<body class="chat">
 
-  <div id='chat-container'>
-
+  <div class="chat__sidebar">
+    <h3>People</h3>
+    <div id="users"></div>
+    <div class="chat__name">
+      <form id='name-form'>
+        <input type="text" id="name-input" placeholder="Your name" />
+      </form>
+    </div>
   </div>
+
+  <div class="chat__main">
+    <ol id='chat-container' class='chat__messages'>
+    </ol>
+      
+    <div class="chat__footer">
+      <form id='chat-form'>
+        <input type="text" id="text-input" placeholder="Enter message..." autofocus autocomplete="off"/>
+        <button>Send</button>
+      </form>
+      <button id='send-location'>Send location</button>
+    </div>
+  </div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/index.js"></script>
+  <script src="/js/lib/moment.js"></script>
 </body>
 
 </html>

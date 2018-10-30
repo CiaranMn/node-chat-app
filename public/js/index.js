@@ -25,7 +25,8 @@ socket.on('newLocationMessage', message => {
 chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   socket.emit('createMessage', {
-    from: nameInput.value, content: textInput.value
+    from: nameInput.value,
+    content: textInput.value
   }, () => console.log('Message received by server')
   )
   chatForm.reset();
@@ -36,21 +37,31 @@ locButton.addEventListener('click', (e) => {
     return alert('Your browser does not support geolocation')
   }
 
+  locButton.innerText = 'Sending location...'
+  locButton.disabled = 'disabled'
+
   navigator.geolocation.getCurrentPosition(position => {
+    locButton.removeAttribute('disabled')
+    locButton.innerText = 'Send location'
     socket.emit('createLocMessage', {
       from: nameInput.value,
       latitude: position.coords.latitude,
       longitude: position.coords.longitude
     })
-  }, () => alert('Unable to fetch location')
+  }, () => { 
+    alert('Unable to fetch location')
+    locButton.removeAttribute('disabled')
+    locButton.innerText = 'Send location'
+   }
   )
 })
 
 function renderLocMessage(message) {
-  locMsgEl = document.createElement('div')
+  let formattedTime = moment(message.createdAt).format('h:mm a')
+  locMsgEl = document.createElement('li')
   locLink = document.createElement('a')
   locLink.target = "_blank"
-  locLink.innerText = `${message.from} sent their location`
+  locLink.innerText = `${message.from} [${formattedTime}] My current location`
   locLink.href = message.url
   locMsgEl.appendChild(locLink)
   chatBox.appendChild(locMsgEl)
@@ -58,9 +69,10 @@ function renderLocMessage(message) {
 }
 
 function renderMessage(message) {
-  chatMsgEl = document.createElement('div')
+  let formattedTime = moment(message.createdAt).format('h:mm a')
+  chatMsgEl = document.createElement('li')
   chatMsgEl.innerText = `
-  ${message.from} [${message.createdAt}]: ${message.content} 
+  ${message.from} [${formattedTime}]: ${message.content} 
   `
   chatBox.appendChild(chatMsgEl)
   chatBox.scrollTop = chatBox.scrollHeight;
