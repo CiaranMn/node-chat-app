@@ -15,6 +15,7 @@ socket.on('disconnect', () =>
 )
 
 socket.on('newMessage', message => {
+
   renderMessage(message);
 })
 
@@ -65,7 +66,7 @@ function renderLocMessage(message) {
   locLink.href = message.url
   locMsgEl.appendChild(locLink)
   chatBox.appendChild(locMsgEl)
-  chatBox.scrollTop = chatBox.scrollHeight;
+  scroll()
 }
 
 function renderMessage(message) {
@@ -75,6 +76,17 @@ function renderMessage(message) {
   ${message.from} [${formattedTime}]: ${message.content} 
   `
   chatBox.appendChild(chatMsgEl)
-  chatBox.scrollTop = chatBox.scrollHeight;
+  scroll()
+}
+
+function scroll() {
+  let lastMessage = chatBox.lastChild
+  let prevMessage = lastMessage.previousSibling
+  let clientHeight = chatBox.clientHeight
+  let scrollTop = chatBox.scrollTop
+  let scrollHeight = chatBox.scrollHeight
+  if (clientHeight + scrollTop + lastMessage.clientHeight + prevMessage.clientHeight >= scrollHeight) {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 }
 
