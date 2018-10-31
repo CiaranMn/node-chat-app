@@ -6,8 +6,21 @@ const locButton = document.querySelector('#send-location')
 
 let socket = io();	
 
-socket.on('connect', () => 
-  console.log('connected to server!')
+socket.on('connect', () => {
+  let params = new URLSearchParams(window.location.search)
+  sendParams = {
+    name: params.get("name"),
+    room: params.get("room")
+  }
+  socket.emit('join', sendParams, error => {
+    if (error) {
+      alert(error)
+      window.location.href = '/'
+    } else {
+      console.log('Succesfully joined room!')
+    }
+  })
+  }
 )
 
 socket.on('disconnect', () => 
@@ -15,7 +28,6 @@ socket.on('disconnect', () =>
 )
 
 socket.on('newMessage', message => {
-
   renderMessage(message);
 })
 

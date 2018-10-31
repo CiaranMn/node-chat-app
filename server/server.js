@@ -10,18 +10,23 @@ const server = http.createServer(app)
 const io = socketIO(server);
 
 const { generateMessage, generateLocationMessage } = require('./util/message')
+const { isRealString } = require('./util/validation')
 const now = () => new Date().toLocaleString()
 
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.emit('newMessage', 
-    generateMessage('Admin', 'Welcome to the chat!')
-  )
+  socket.on('join', (params, callback) => {
+    if (!isRealString(params.name) || !isRealString(params.room) ) {
+      callback('Name and room must be supplied')
+    } 
+    socket.join(params.room)
+    callback()
 
-  socket.broadcast.emit('newMessage', 
-    generateMessage('Admin', 'A user joined the chat!')
-  )
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat!'))
+
+    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', 'A user joined the chat!'))
+  })
 
   socket.on('createMessage', (message, callback) => {
     console.log(`Message received [${now()}]: ${JSON.stringify(message, undefined, 2)} `)
